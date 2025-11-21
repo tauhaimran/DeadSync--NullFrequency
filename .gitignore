@@ -1,3 +1,23 @@
+
+############
+# DOING THIS SO GITHUB CAN STFU - ruining our coll ahh project with stupid errors - ugh
+# Prevent heavy assets from being committed
+*.dylib
+*.fbx
+*.obj
+*.blend
+*.gltf
+*.glb
+*.max
+*.usdz
+*.stl
+*.dae
+*.3ds
+*.ply
+############
+# you never read the first line anyways , ya got that ... lol
+
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
