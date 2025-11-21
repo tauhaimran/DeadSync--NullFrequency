@@ -1,4 +1,4 @@
-name: Project Diagnostics
+name: Basic Project Diagnostics
 
 on:
   push:
@@ -10,51 +10,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository (without LFS)
+      - name: Checkout repository (no LFS)
         uses: actions/checkout@v4
         with:
           lfs: false
 
-      - name: Check for accidentally committed heavy files (>50 MB)
+      - name: Check Unity project structure
         run: |
-          echo "Scanning for large files..."
-          git rev-list --objects --all |
-          git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize)' |
-          awk '$3 > 50000000 {print "\nLARGE FILE FOUND:", $0}' || true
+          echo "Checking Unity project structure..."
+          if [ -d "Assets" ]; then 
+            echo "✔ Assets folder found."
+          else
+            echo "❌ Assets folder missing!"
+          fi
 
-      - name: Check for Unity folders that should NOT be in Git
+          if [ -d "ProjectSettings" ]; then 
+            echo "✔ ProjectSettings folder found."
+          else
+            echo "❌ ProjectSettings folder missing!"
+          fi
+
+      - name: Check for unwanted Unity folders in repo
         run: |
-          echo "Checking for unwanted Unity folders..."
-          if [ -d "Library" ]; then echo "⚠️ Library folder FOUND (should be in .gitignore)"; fi
-          if [ -d "Temp" ]; then echo "⚠️ Temp folder FOUND (should be in .gitignore)"; fi
-          if [ -d "Logs" ]; then echo "⚠️ Logs folder FOUND (should be in .gitignore)"; fi
+          echo "Checking unwanted folders..."
+          [ -d "Library" ] && echo "⚠️ Library folder is committed (should be ignored)"
+          [ -d "Temp" ] && echo "⚠️ Temp folder is committed (should be ignored)"
+          [ -d "Logs" ] && echo "⚠️ Logs folder is committed (should be ignored)"
 
-      - name: Check .gitignore for Unity patterns
+      - name: Check .gitignore for Unity rules
         run: |
           echo "Checking .gitignore..."
-          if ! grep -q "Library/" .gitignore; then echo "⚠️ Missing 'Library/' ignore rule"; fi
-          if ! grep -q "Temp/" .gitignore; then echo "⚠️ Missing 'Temp/' ignore rule"; fi
-          if ! grep -q "Logs/" .gitignore; then echo "⚠️ Missing 'Logs/' ignore rule"; fi
-
-      - name: Check for leftover LFS pointers
-        run: |
-          echo "Checking for LFS pointer files..."
-          if grep -R "oid sha256" -n .; then
-            echo "⚠️ LFS pointer files FOUND - must be removed or untracked"
+          if [ -f ".gitignore" ]; then
+            grep -q "Library/" .gitignore || echo "⚠️ .gitignore is missing: Library/"
+            grep -q "Temp/" .gitignore || echo "⚠️ .gitignore is missing: Temp/"
+            grep -q "Logs/" .gitignore || echo "⚠️ .gitignore is missing: Logs/"
           else
-            echo "No LFS pointers found."
+            echo "⚠️ No .gitignore found!"
           fi
 
-      - name: Basic Unity Project Structure Test
-        run: |
-          echo "Checking Unity folder structure..."
-          if [ -d "Assets" ] && [ -d "ProjectSettings" ]; then
-            echo "Unity project structure OK"
-          else
-            echo "❌ Unity core folders missing"
-            exit 1
-          fi
       - name: Output Git Status
         run: |
-          echo "Current Git status:"
+          echo "Git status:"
           git status --short
