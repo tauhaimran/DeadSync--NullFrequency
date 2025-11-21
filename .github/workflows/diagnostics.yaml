@@ -1,4 +1,4 @@
-name: Basic Project Diagnostics
+name: Basic Diagnostics
 
 on:
   push:
@@ -10,45 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository (no LFS)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: false
 
-      - name: Check Unity project structure
+      - name: Report Git Status
         run: |
-          echo "Checking Unity project structure..."
-          if [ -d "Assets" ]; then 
-            echo "✔ Assets folder found."
-          else
-            echo "❌ Assets folder missing!"
-          fi
-
-          if [ -d "ProjectSettings" ]; then 
-            echo "✔ ProjectSettings folder found."
-          else
-            echo "❌ ProjectSettings folder missing!"
-          fi
-
-      - name: Check for unwanted Unity folders in repo
-        run: |
-          echo "Checking unwanted folders..."
-          [ -d "Library" ] && echo "⚠️ Library folder is committed (should be ignored)"
-          [ -d "Temp" ] && echo "⚠️ Temp folder is committed (should be ignored)"
-          [ -d "Logs" ] && echo "⚠️ Logs folder is committed (should be ignored)"
-
-      - name: Check .gitignore for Unity rules
-        run: |
-          echo "Checking .gitignore..."
-          if [ -f ".gitignore" ]; then
-            grep -q "Library/" .gitignore || echo "⚠️ .gitignore is missing: Library/"
-            grep -q "Temp/" .gitignore || echo "⚠️ .gitignore is missing: Temp/"
-            grep -q "Logs/" .gitignore || echo "⚠️ .gitignore is missing: Logs/"
-          else
-            echo "⚠️ No .gitignore found!"
-          fi
-
-      - name: Output Git Status
-        run: |
-          echo "Git status:"
+          echo "=== Git Status ==="
           git status --short
+
+      - name: Warn if Library folder is committed
+        run: |
+          echo "=== Checking for Library folder ==="
+          if [ -d "Library" ]; then
+            echo "⚠️  Warning: Library/ folder is committed! This will break clones."
+          else
+            echo "✔ Library folder not committed."
+          fi
+
+      - name: Check .gitignore basics
+        run: |
+          echo "=== Checking .gitignore ==="
+          if [ ! -f ".gitignore" ]; then
+            echo "⚠️ No .gitignore found!"
+            exit 0
+          fi
+
+          grep -q "[Ll]ibrary/" .gitignore && echo "✔ .gitignore includes Library/" || echo "⚠️ Missing Library/ ignore rule"
+          grep -q "[Tt]emp/" .gitignore && echo "✔ .gitignore includes Temp/" || echo "⚠️ Missing Temp/ ignore rule"
+          grep -q "[Ll]ogs/" .gitignore && echo "✔ .gitignore includes Logs/" || echo "⚠️ Missing Logs/ ignore rule"

@@ -14,8 +14,28 @@
 *.dae
 *.3ds
 *.ply
+
+#temporarily ignoring this folder
+.github/workflows/diagnostics.yml
 ############
 # you never read the first line anyways , ya got that ... lol
+
+# ALSO THIS HEADACHE WITH FOLDERS
+# =============================
+# UNITY PROJECT IGNORE RULES
+# =============================
+
+# Unity project inside DeadSync--NullFrequency/
+DeadSync--NullFrequency/[Ll]ibrary/
+DeadSync--NullFrequency/[Tt]emp/
+DeadSync--NullFrequency/[Ll]ogs/
+DeadSync--NullFrequency/[Oo]bj/
+DeadSync--NullFrequency/[Bb]uild/
+DeadSync--NullFrequency/[Bb]uilds/
+DeadSync--NullFrequency/[Uu]ser[Ss]ettings/
+DeadSync--NullFrequency/[Mm]emoryCaptures/
+DeadSync--NullFrequency/[Rr]ecordings/
+
 
 
 # This .gitignore file should be placed at the root of your Unity project directory
