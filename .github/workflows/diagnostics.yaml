@@ -1,0 +1,60 @@
+name: Project Diagnostics
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (without LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: Check for accidentally committed heavy files (>50 MB)
+        run: |
+          echo "Scanning for large files..."
+          git rev-list --objects --all |
+          git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize)' |
+          awk '$3 > 50000000 {print "\nLARGE FILE FOUND:", $0}' || true
+
+      - name: Check for Unity folders that should NOT be in Git
+        run: |
+          echo "Checking for unwanted Unity folders..."
+          if [ -d "Library" ]; then echo "⚠️ Library folder FOUND (should be in .gitignore)"; fi
+          if [ -d "Temp" ]; then echo "⚠️ Temp folder FOUND (should be in .gitignore)"; fi
+          if [ -d "Logs" ]; then echo "⚠️ Logs folder FOUND (should be in .gitignore)"; fi
+
+      - name: Check .gitignore for Unity patterns
+        run: |
+          echo "Checking .gitignore..."
+          if ! grep -q "Library/" .gitignore; then echo "⚠️ Missing 'Library/' ignore rule"; fi
+          if ! grep -q "Temp/" .gitignore; then echo "⚠️ Missing 'Temp/' ignore rule"; fi
+          if ! grep -q "Logs/" .gitignore; then echo "⚠️ Missing 'Logs/' ignore rule"; fi
+
+      - name: Check for leftover LFS pointers
+        run: |
+          echo "Checking for LFS pointer files..."
+          if grep -R "oid sha256" -n .; then
+            echo "⚠️ LFS pointer files FOUND - must be removed or untracked"
+          else
+            echo "No LFS pointers found."
+          fi
+
+      - name: Basic Unity Project Structure Test
+        run: |
+          echo "Checking Unity folder structure..."
+          if [ -d "Assets" ] && [ -d "ProjectSettings" ]; then
+            echo "Unity project structure OK"
+          else
+            echo "❌ Unity core folders missing"
+            exit 1
+          fi
+      - name: Output Git Status
+        run: |
+          echo "Current Git status:"
+          git status --short
