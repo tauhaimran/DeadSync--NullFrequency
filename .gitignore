@@ -16,7 +16,6 @@
 *.ply
 
 #temporarily ignoring this folder
-.github/workflows/diagnostics.yml
 ############
 # you never read the first line anyways , ya got that ... lol
 
@@ -26,6 +25,7 @@
 # =============================
 
 # Unity project inside DeadSync--NullFrequency/
+DeadSync--NullFrequency/[Aa]ssets/
 DeadSync--NullFrequency/[Ll]ibrary/
 DeadSync--NullFrequency/[Tt]emp/
 DeadSync--NullFrequency/[Ll]ogs/
