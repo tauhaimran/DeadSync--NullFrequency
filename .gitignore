@@ -15,6 +15,7 @@
 *.3ds
 *.ply
 *.zip
+*.rar
 
 #temporarily ignoring this folder
 ############
