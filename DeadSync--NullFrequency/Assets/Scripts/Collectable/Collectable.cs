@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+//using DOTweening;
 public class Collectable : MonoBehaviour
 {
     public enum Type {Health, Ammo, Coin}
@@ -19,5 +20,6 @@ public class Collectable : MonoBehaviour
        //     case Type.Coin: SaveGame.Coins += value; break;
        // }
       //  Destroy(gameObject);
+      //transform.DoMoveX(5,1);
     }
 }
