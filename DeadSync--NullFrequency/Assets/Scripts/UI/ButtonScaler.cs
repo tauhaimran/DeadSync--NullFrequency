@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,10 +15,12 @@ public class ButtonScaler : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        transform.localScale = Vector3.one * ScaleDownTo;
+        transform.DOKill();
+        transform.DOScale(OriginalScale * ScaleDownTo, 0.15f);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        transform.localScale = OriginalScale;
+        transform.DOKill();
+        transform.DOScale(OriginalScale, 0.15f);
     }
 }
