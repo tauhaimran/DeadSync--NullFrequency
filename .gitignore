@@ -27,7 +27,11 @@
 # =============================
 
 # Unity project inside DeadSync--NullFrequency/
-DeadSync--NullFrequency/[Aa]ssets/
+#DeadSync--NullFrequency/[Aa]ssets/
+DeadSync--NullFrequency/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+DeadSync--NullFrequency/[Aa]ssets/[Ss]treamingAssets/aa.meta
+DeadSync--NullFrequency/[Aa]ssets/[Ss]treamingAssets/aa/
+DeadSync--NullFrequency/[Aa]ssets/Environment
 DeadSync--NullFrequency/[Ll]ibrary/
 DeadSync--NullFrequency/[Tt]emp/
 DeadSync--NullFrequency/[Ll]ogs/
