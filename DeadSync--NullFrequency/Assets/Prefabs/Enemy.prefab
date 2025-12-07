@@ -943,7 +943,7 @@ Animator:
   m_GameObject: {fileID: 2302706462805310311}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 1dd9c954362f1eb4a86dcc2c3013fd91, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0e24a96c5a6266446a95eb33ac68c99c, type: 2}
+  m_Controller: {fileID: 9100000, guid: e8e27dc218e89c14bbbb677951143bc6, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -972,6 +972,7 @@ MonoBehaviour:
   Coins: 30
   patrolDistance: 10
   moveHorizontal: 1
+  damage: 0
   agent: {fileID: 0}
   whatIsGround:
     serializedVersion: 2
